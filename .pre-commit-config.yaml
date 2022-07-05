@@ -1,0 +1,30 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.3.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+  - repo: https://github.com/golangci/golangci-lint
+    rev: v1.46.2
+    hooks:
+      - id: golangci-lint
+  - repo: https://github.com/zricethezav/gitleaks
+    rev: v8.8.11
+    hooks:
+      - id: gitleaks
+
+ci:
+  autofix_commit_msg: |
+      [pre-commit.ci] auto fixes from pre-commit.com hooks
+
+      for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ''
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false
