@@ -1,8 +1,19 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+
+	"github.com/rog-golang-buddies/internal/utils"
+)
 
 func main() {
-	// Feel free to delete this file.
-	fmt.Println("Hello Gophers")
+	commands, flags, err := utils.ParseCliArguments(os.Args[1:])
+
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("CLI Commands: %v\n", commands)
+	fmt.Printf("CLI Flags: %v\n", flags)
 }
