@@ -1,0 +1,16 @@
+@startuml create_update_table
+
+title "Create/update table from CLI"
+
+actor User as u
+participant CLI as cli
+collections "Model Spec" as ms
+collections "Database Spec" as dbs
+database Database as db
+
+u -> cli : $>gaa update model
+cli <- dbs : Read database spec file
+cli <- ms : Read model spec file
+cli -> db : Create or update table
+
+@enduml

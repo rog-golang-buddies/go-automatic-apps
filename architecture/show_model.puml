@@ -1,0 +1,19 @@
+@startuml create_update_table
+
+title "Show model data"
+
+actor User as u
+participant UI as ui
+participant Server as s
+collections "Model Spec" as ms
+collections "Database Spec" as dbs
+database Database as db
+
+u -> ui : GET /app/model/<model_name>
+ui -> s : REST requests
+s <- dbs : Read database spec file
+s <- ms : Read model spec file
+s <- db : Read table (model) data
+s -> ui : Show list of rows
+u <- ui : HTML
+@enduml
