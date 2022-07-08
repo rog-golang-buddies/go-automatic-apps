@@ -1,0 +1,21 @@
+@startuml Architecture
+
+title "GAA Architecture"
+
+[Model Spec] as ms
+[Database Spec] as dbs
+database "Database" as db
+[Go Automatic Apps - server] as app
+[Go Automatic Apps - cli] as cli
+[React UI] as ui
+
+ms -down-> app
+dbs -down-> app
+app <-down-> db
+app <-right-> ui
+
+ms -down-> cli
+dbs -down-> cli
+cli <-down-> db
+
+@enduml
