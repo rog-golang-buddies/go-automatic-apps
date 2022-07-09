@@ -29,10 +29,13 @@ func Start() {
 }
 
 func Generate() {
-	entc.Generate("./ent/schema", &gen.Config{
+	err := entc.Generate("./ent/schema", &gen.Config{
 		Header: "// GAA Generated",
 		IDType: &field.TypeInfo{Type: field.TypeUUID},
 	})
+	if err != nil {
+		panic(err)
+	}
 }
 
 func getTables() []string {
