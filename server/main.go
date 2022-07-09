@@ -22,7 +22,10 @@ func Start() {
 	// http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	fmt.Println("Server started on http://localhost:8080")
-	http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func Generate() {
@@ -43,6 +46,10 @@ func getTables() []string {
 
 	result := []string{}
 	tables, err := graph.Tables()
+	if err != nil {
+		return []string{"Error", err.Error()}
+	}
+
 	for _, table := range tables {
 		result = append(result, table.Name)
 	}
