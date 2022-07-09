@@ -4,6 +4,8 @@ go 1.18
 
 require entgo.io/ent v0.10.1
 
+require github.com/sergi/go-diff v1.1.0 // indirect
+
 require (
 	ariga.io/atlas v0.3.7-0.20220303204946-787354f533c3 // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect

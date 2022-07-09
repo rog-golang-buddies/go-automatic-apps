@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
@@ -11,7 +12,10 @@ import (
 
 func Start() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Welcome GAA!")
+
+		tables := strings.Join(getTables(), "<br/>")
+
+		fmt.Fprintf(w, "Welcome to GAA! <br><br>"+tables)
 	})
 
 	// fs := http.FileServer(http.Dir("static/"))
@@ -26,4 +30,21 @@ func Generate() {
 		Header: "// GAA Generated",
 		IDType: &field.TypeInfo{Type: field.TypeUUID},
 	})
+}
+
+func getTables() []string {
+	graph, err := entc.LoadGraph("./ent/schema", &gen.Config{
+		Header: "// GAA Generated",
+		IDType: &field.TypeInfo{Type: field.TypeUUID},
+	})
+	if err != nil {
+		return []string{"Error", err.Error()}
+	}
+
+	result := []string{}
+	tables, err := graph.Tables()
+	for _, table := range tables {
+		result = append(result, table.Name)
+	}
+	return result
 }
