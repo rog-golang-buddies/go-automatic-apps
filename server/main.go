@@ -3,6 +3,10 @@ package server
 import (
 	"fmt"
 	"net/http"
+
+	"entgo.io/ent/entc"
+	"entgo.io/ent/entc/gen"
+	"entgo.io/ent/schema/field"
 )
 
 func Start() {
@@ -15,5 +19,11 @@ func Start() {
 
 	fmt.Println("Server started on http://localhost:8080")
 	http.ListenAndServe(":8080", nil)
+}
 
+func Generate() {
+	entc.Generate("./ent/schema", &gen.Config{
+		Header: "// GAA Generated",
+		IDType: &field.TypeInfo{Type: field.TypeUUID},
+	})
 }
