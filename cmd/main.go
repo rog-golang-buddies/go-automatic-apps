@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/rog-golang-buddies/internal/utils"
+	"github.com/rog-golang-buddies/internal/parser"
 )
 
 func main() {
-	commands, flags, err := utils.ParseCliArguments(os.Args[1:])
+	commands, flags, err := parser.ParseCliArguments(os.Args[1:])
 
 	if err != nil {
 		panic(err)

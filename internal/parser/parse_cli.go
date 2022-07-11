@@ -1,4 +1,4 @@
-package utils
+package parser
 
 import (
 	"fmt"
@@ -32,6 +32,11 @@ func ParseCliArguments(arguments []string) ([]string, map[string]interface{}, er
 		if lastValueWasFlag {
 			// The current value is also a flag so we just add true to the flags value
 			flag := strings.ReplaceAll(lastValueFlag, "-", "")
+
+			if flag == "" {
+				return nil, nil, fmt.Errorf("empty flag was passed in")
+			}
+
 			if flags[flag] != nil {
 				return nil, nil, fmt.Errorf("flag %v was set multiple times", flag)
 			}
@@ -42,6 +47,7 @@ func ParseCliArguments(arguments []string) ([]string, map[string]interface{}, er
 			}
 			lastValueWasFlag = false
 			lastValueFlag = ""
+
 		} else {
 			// the last value was not a flag
 			// if this value is also not a flag the user entered in 2 values for a single flag
@@ -59,6 +65,9 @@ func ParseCliArguments(arguments []string) ([]string, map[string]interface{}, er
 
 	if lastValueWasFlag {
 		flag := strings.ReplaceAll(lastValueFlag, "-", "")
+		if flag == "" {
+			return nil, nil, fmt.Errorf("empty flag was passed in")
+		}
 		if flags[flag] != nil {
 			return nil, nil, fmt.Errorf("flag %v was set multiple times", flag)
 		}
