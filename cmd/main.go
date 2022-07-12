@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/rog-golang-buddies/internal/parser"
+	"github.com/rog-golang-buddies/go-automatic-apps/internal/parser"
 )
 
 func main() {
