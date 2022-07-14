@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/rog-golang-buddies/go-automatic-apps/internal/parser"
+	cmd "github.com/rog-golang-buddies/go-automatic-apps/pkg/commands"
 )
 
 func main() {
@@ -14,6 +15,19 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf("CLI Commands: %v\n", commands)
-	fmt.Printf("CLI Flags: %v\n", flags)
+	baseCommand := commands[0]
+	subCommands := commands[1:]
+
+	switch baseCommand {
+	case "help":
+		err = cmd.HelpCommand.Run(&subCommands, &flags)
+	case "version":
+		err = cmd.VersionCommand.Run(&subCommands, &flags)
+	default:
+		panic(fmt.Errorf("no command matches %v", baseCommand))
+	}
+
+	if err != nil {
+		panic(fmt.Errorf("error executing command %v", err))
+	}
 }
