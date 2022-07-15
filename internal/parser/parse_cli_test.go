@@ -97,5 +97,17 @@ func TestParseCliArguments(t *testing.T) {
 			t.Fatalf("Error message incorrect. Expected \"%v\" got \"%v\"", "empty flag was passed in", err.Error())
 		}
 	})
+	t.Run("Errors if no commands were passed in", func(t *testing.T) {
+		_, _, err := ParseCliArguments([]string{"--foo", "bar"})
+
+		if err == nil {
+			t.Fatalf("Error was expected but not received")
+		}
+
+		if err.Error() != "no commands were provided" {
+			t.Fatalf("Error message incorrect. Expected \"%v\" got \"%v\"", "no commands were provided", err.Error())
+		}
+
+	})
 
 }
