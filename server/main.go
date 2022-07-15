@@ -5,17 +5,15 @@ import (
 	"net/http"
 	"strings"
 
-	"entgo.io/ent/entc"
-	"entgo.io/ent/entc/gen"
-	"entgo.io/ent/schema/field"
+	"github.com/rog-golang-buddies/go-automatic-apps/database"
 )
 
 func Start() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 
-		tables := strings.Join(getTables(), "<br/>")
+		tables := strings.Join(database.GetTables(), "<br/>")
 
-		fmt.Fprintf(w, "Welcome to GAA! <br><br>"+tables)
+		fmt.Fprintf(w, "<html><body>Welcome to GAA! <br><br>"+tables+"</body></html>")
 	})
 
 	// fs := http.FileServer(http.Dir("static/"))
@@ -26,35 +24,4 @@ func Start() {
 	if err != nil {
 		panic(err)
 	}
-}
-
-func Generate() {
-	err := entc.Generate("./ent/schema", &gen.Config{
-		Header: "// GAA Generated",
-		IDType: &field.TypeInfo{Type: field.TypeUUID},
-	})
-	if err != nil {
-		panic(err)
-	}
-}
-
-func getTables() []string {
-	graph, err := entc.LoadGraph("./ent/schema", &gen.Config{
-		Header: "// GAA Generated",
-		IDType: &field.TypeInfo{Type: field.TypeUUID},
-	})
-	if err != nil {
-		return []string{"Error", err.Error()}
-	}
-
-	result := []string{}
-	tables, err := graph.Tables()
-	if err != nil {
-		return []string{"Error", err.Error()}
-	}
-
-	for _, table := range tables {
-		result = append(result, table.Name)
-	}
-	return result
 }
