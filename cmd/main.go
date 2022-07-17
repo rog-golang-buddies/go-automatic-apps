@@ -12,6 +12,7 @@ func main() {
 	commands, flags, err := parser.ParseCliArguments(os.Args[1:])
 
 	if err != nil {
+		cmd.PrintUsageInstructions()
 		panic(err)
 	}
 
@@ -24,7 +25,8 @@ func main() {
 	case "version":
 		err = cmd.VersionCommand.Run(&subCommands, &flags)
 	default:
-		panic(fmt.Errorf("no command matches %v", baseCommand))
+		fmt.Println("unrecognised action")
+		cmd.PrintUsageInstructions()
 	}
 
 	if err != nil {
