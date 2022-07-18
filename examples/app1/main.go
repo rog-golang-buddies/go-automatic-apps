@@ -5,5 +5,9 @@ import (
 )
 
 func main() {
-	gaa.Start()
+	var config gaa.ServerConfig = gaa.ServerConfig{
+		Host: "localhost",
+		Port: "8080",
+	}
+	gaa.Start(config)
 }

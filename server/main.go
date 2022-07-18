@@ -10,10 +10,23 @@ import (
 	"github.com/rog-golang-buddies/go-automatic-apps/database"
 )
 
+type ServerConfig struct {
+	Host string
+	Port string
+}
+
 //go:embed templates/*
 var content embed.FS
 
-func Start() {
+func Start(config ServerConfig) {
+
+	// Set defauls
+	if config.Host == "" {
+		config.Host = "localhost"
+	}
+	if config.Port == "" {
+		config.Port = "8080"
+	}
 
 	fmt.Println("Starting server...")
 
@@ -29,6 +42,5 @@ func Start() {
 		})
 	})
 
-	fmt.Println("Server started on http://localhost:8080")
-	router.Run()
+	router.Run(config.Host + ":" + config.Port)
 }
