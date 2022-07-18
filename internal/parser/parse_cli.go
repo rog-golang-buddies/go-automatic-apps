@@ -75,7 +75,7 @@ func ParseCliArguments(arguments []string) ([]string, map[string]interface{}, er
 	}
 
 	if len(commands) == 0 {
-		return nil, nil, fmt.Errorf("no commands were provided")
+		return nil, nil, fmt.Errorf("no action was provided")
 	}
 
 	return commands, flags, nil
