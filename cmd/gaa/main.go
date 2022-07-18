@@ -13,7 +13,7 @@ func main() {
 
 	if err != nil {
 		cmd.PrintUsageInstructions()
-		panic(err)
+		return
 	}
 
 	baseCommand := commands[0]
