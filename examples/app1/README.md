@@ -18,6 +18,9 @@ go get -d entgo.io/ent/cmd/ent
 go run entgo.io/ent/cmd/ent init Todo
 ```
 
+Then, generate its code
+
+go generate ./ent
 
 ## Run
 
