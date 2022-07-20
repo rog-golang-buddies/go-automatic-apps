@@ -4,6 +4,7 @@ import (
 	"embed"
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 
 	"entgo.io/ent/dialect/sql/schema"
@@ -50,5 +51,9 @@ func Start(config ServerConfig) {
 		})
 	})
 
-	router.Run(config.Host + ":" + config.Port)
+	err := router.Run(config.Host + ":" + config.Port)
+	if err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+		panic(err)
+	}
 }
