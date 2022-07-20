@@ -21,6 +21,9 @@ type ServerConfig struct {
 //go:embed templates/*
 var content embed.FS
 
+//go:embed web/dist/*
+var webEmbed embed.FS
+
 func Start(config ServerConfig) {
 
 	// Set defauls
@@ -33,9 +36,16 @@ func Start(config ServerConfig) {
 
 	fmt.Println("Starting server...")
 
-	templates := template.Must(template.ParseFS(content, "templates/**"))
 	router := gin.Default()
+
+	// Simple templates
+	templates := template.Must(template.ParseFS(content, "templates/**"))
 	router.SetHTMLTemplate(templates)
+
+	// UI static files
+	webFS := http.FS(webEmbed)
+	router.StaticFS("/app", webFS)
+
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.tmpl", gin.H{})
 	})
