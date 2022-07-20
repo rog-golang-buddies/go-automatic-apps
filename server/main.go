@@ -6,13 +6,15 @@ import (
 	"html/template"
 	"net/http"
 
+	"entgo.io/ent/dialect/sql/schema"
+
 	"github.com/gin-gonic/gin"
-	"github.com/rog-golang-buddies/go-automatic-apps/database"
 )
 
 type ServerConfig struct {
-	Host string
-	Port string
+	Host   string
+	Port   string
+	Tables []*schema.Table
 }
 
 //go:embed templates/*
@@ -37,8 +39,14 @@ func Start(config ServerConfig) {
 		c.HTML(http.StatusOK, "index.tmpl", gin.H{})
 	})
 	router.GET("/config", func(c *gin.Context) {
+
+		tables := []string{}
+		for _, table := range config.Tables {
+			tables = append(tables, table.Name)
+		}
+
 		c.HTML(http.StatusOK, "config.tmpl", gin.H{
-			"tables": database.GetTables(),
+			"tables": tables,
 		})
 	})
 
