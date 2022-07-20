@@ -9,7 +9,19 @@ Example app to use GAA
 ```shell
 go mod init exampleapp1
 go get github.com/rog-golang-buddies/go-automatic-apps
+go get github.com/mattn/go-sqlite3
+go get -d entgo.io/ent/cmd/ent
 ```
+
+## Add model
+
+```shell
+go run entgo.io/ent/cmd/ent init Todo
+```
+
+Then, generate its code
+
+go generate ./ent
 
 ## Run
 

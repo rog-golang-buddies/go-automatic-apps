@@ -1,27 +1,59 @@
 package server
 
 import (
+	"embed"
 	"fmt"
+	"html/template"
+	"log"
 	"net/http"
-	"strings"
 
-	"github.com/rog-golang-buddies/go-automatic-apps/database"
+	"entgo.io/ent/dialect/sql/schema"
+
+	"github.com/gin-gonic/gin"
 )
 
-func Start() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+type ServerConfig struct {
+	Host   string
+	Port   string
+	Tables []*schema.Table
+}
 
-		tables := strings.Join(database.GetTables(), "<br/>")
+//go:embed templates/*
+var content embed.FS
 
-		fmt.Fprintf(w, "<html><body>Welcome to GAA! <br><br>"+tables+"</body></html>")
+func Start(config ServerConfig) {
+
+	// Set defauls
+	if config.Host == "" {
+		config.Host = "localhost"
+	}
+	if config.Port == "" {
+		config.Port = "8080"
+	}
+
+	fmt.Println("Starting server...")
+
+	templates := template.Must(template.ParseFS(content, "templates/**"))
+	router := gin.Default()
+	router.SetHTMLTemplate(templates)
+	router.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.tmpl", gin.H{})
+	})
+	router.GET("/config", func(c *gin.Context) {
+
+		tables := []string{}
+		for _, table := range config.Tables {
+			tables = append(tables, table.Name)
+		}
+
+		c.HTML(http.StatusOK, "config.tmpl", gin.H{
+			"tables": tables,
+		})
 	})
 
-	// fs := http.FileServer(http.Dir("static/"))
-	// http.Handle("/static/", http.StripPrefix("/static/", fs))
-
-	fmt.Println("Server started on http://localhost:8080")
-	err := http.ListenAndServe(":8080", nil)
+	err := router.Run(config.Host + ":" + config.Port)
 	if err != nil {
+		log.Fatalf("Failed to start server: %v", err)
 		panic(err)
 	}
 }
