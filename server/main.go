@@ -3,13 +3,11 @@ package server
 import (
 	"embed"
 	"fmt"
-	"html/template"
+	"io/fs"
 	"log"
 	"net/http"
 
 	"entgo.io/ent/dialect/sql/schema"
-
-	"github.com/gin-gonic/gin"
 )
 
 type ServerConfig struct {
@@ -18,11 +16,8 @@ type ServerConfig struct {
 	Tables []*schema.Table
 }
 
-//go:embed templates/*
-var content embed.FS
-
-//go:embed web/dist/*
-var webEmbed embed.FS
+//go:embed web/dist
+var webDistEmbed embed.FS
 
 func Start(config ServerConfig) {
 
@@ -36,34 +31,17 @@ func Start(config ServerConfig) {
 
 	fmt.Println("Starting server...")
 
-	router := gin.Default()
-
-	// Simple templates
-	templates := template.Must(template.ParseFS(content, "templates/**"))
-	router.SetHTMLTemplate(templates)
-
-	// UI static files
-	webFS := http.FS(webEmbed)
-	router.StaticFS("/app", webFS)
-
-	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.tmpl", gin.H{})
-	})
-	router.GET("/config", func(c *gin.Context) {
-
-		tables := []string{}
-		for _, table := range config.Tables {
-			tables = append(tables, table.Name)
-		}
-
-		c.HTML(http.StatusOK, "config.tmpl", gin.H{
-			"tables": tables,
-		})
-	})
-
-	err := router.Run(config.Host + ":" + config.Port)
+	webRoot, err := fs.Sub(webDistEmbed, "web/dist")
 	if err != nil {
-		log.Fatalf("Failed to start server: %v", err)
+		log.Fatal(err)
 		panic(err)
+	}
+	http.Handle("/", http.FileServer(http.FS(webRoot)))
+
+	var serverUrl = config.Host + ":" + config.Port
+	log.Println("Server started at " + serverUrl)
+	err = http.ListenAndServe(serverUrl, nil)
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
 	}
 }
