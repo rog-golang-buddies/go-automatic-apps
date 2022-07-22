@@ -37,4 +37,5 @@ fmt:
 ## build: Build binary into bin/ directory
 .PHONY: build
 build:
+	yarn --cwd ./server/web build
 	go build -ldflags="-w -s" -o bin/ ./cmd/...
