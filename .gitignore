@@ -18,3 +18,8 @@ bin/
 
 # IDE
 .vscode
+
+
+# Fix go:embed lint error
+server/web/dist/*
+!server/web/dist/keep-folder/
