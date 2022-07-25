@@ -1,0 +1,15 @@
+syntax = "proto3";
+package database;
+option go_package = "./rpc";
+
+service DatabaseService {
+    rpc ListTables(ListTablesRequest) returns (ListTablesResponse);
+}
+
+message ListTablesRequest {
+
+}
+
+message ListTablesResponse {
+    repeated string tables = 1;
+}
