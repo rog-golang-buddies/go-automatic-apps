@@ -34,8 +34,14 @@ vet:
 fmt:
 	go fmt ./...
 
+## protoc: Generate code from proto files
+.PHONY: protoc
+protoc:
+	protoc -I=./proto --go_out=. --go-grpc_out=. ./proto/*.proto
+
 ## build: Build binary into bin/ directory
 .PHONY: build
 build:
+	yarn --cwd ./server/web install
 	yarn --cwd ./server/web build
 	go build -ldflags="-w -s" -o bin/ ./cmd/...

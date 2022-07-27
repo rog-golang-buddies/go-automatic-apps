@@ -27,10 +27,11 @@ func main() {
 
 	var tables = migrate.Tables
 
-	var config gaa.ServerConfig = gaa.ServerConfig{
-		Host:   "localhost",
-		Port:   "8080",
-		Tables: tables,
+	var config = gaa.ServerConfig{
+		Host:     "localhost",
+		HttpPort: "8080",
+		GRPCPort: "8081",
+		Tables:   tables,
 	}
 
 	gaa.Start(config)
