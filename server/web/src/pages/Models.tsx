@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 
 
@@ -14,5 +15,6 @@ export default function Models() {
         {models.map(model => <div>{model}</div>)}
         {models.length === 0 && <div>No models</div>}
 
+        <Link to={"/"}>Go back</Link>
     </>
 }
