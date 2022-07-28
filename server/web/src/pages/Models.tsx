@@ -7,6 +7,8 @@ export default function Models() {
 
     const [models, setModels] = useState([]);
 
+    // TODO: call gRPC service to get models
+
     return <>
         <h1>Models</h1>
         {models.map(model => <div>{model}</div>)}
