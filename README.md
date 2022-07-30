@@ -36,6 +36,12 @@ The server does it automatically by reading the models definitions.
 
 # Contribute
 
+## Setup
+
+* Go 1.18
+* Protocol Buffers: [](https://github.com/protocolbuffers/protobuf/releases)
+
+
 ## Folders
 
 * `architecture`: Documents and diagrams

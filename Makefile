@@ -37,11 +37,13 @@ fmt:
 ## protoc: Generate code from proto files
 .PHONY: protoc
 protoc:
+	go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
+	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
 	protoc -I=./proto --go_out=. --go-grpc_out=. ./proto/*.proto
 
 ## build: Build binary into bin/ directory
 .PHONY: build
-build:
+build: protoc
 	yarn --cwd ./server/web install
 	yarn --cwd ./server/web build
 	go build -ldflags="-w -s" -o bin/ ./cmd/...
