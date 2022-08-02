@@ -13,16 +13,13 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/rog-golang-buddies/go-automatic-apps/rpc"
 	"github.com/rs/cors"
 	"golang.org/x/sync/errgroup"
-	"google.golang.org/grpc"
 )
 
 type ServerConfig struct {
 	Host     string
 	HttpPort string
-	GRPCPort string
 	Tables   []*schema.Table
 }
 
@@ -37,9 +34,6 @@ func Start(config ServerConfig) {
 	}
 	if config.HttpPort == "" {
 		config.HttpPort = "8080"
-	}
-	if config.GRPCPort == "" {
-		config.GRPCPort = "8081"
 	}
 
 	// NotifyContext for server graceful shutdown
@@ -80,28 +74,8 @@ func Start(config ServerConfig) {
 		// Run the server
 		return httpServer.ListenAndServe()
 	})
-
-	grpcServer := grpc.NewServer()
-	databaseService := rpc.NewDatabaseService()
-	rpc.RegisterDatabaseServiceServer(grpcServer, databaseService)
-	g.Go(func() error {
-		lis, err := net.Listen("tcp", fmt.Sprintf(":%s", config.GRPCPort))
-		if err != nil {
-			log.Panicf("grpc listen: %v", err.Error())
-			return err
-		}
-
-		err = grpcServer.Serve(lis)
-		if err != nil {
-			log.Panicf("grpc serve: %v", err.Error())
-			return err
-		}
-
-		return nil
-	})
 	g.Go(func() error {
 		<-gCtx.Done()
-		grpcServer.GracefulStop()
 		return httpServer.Shutdown(context.Background())
 	})
 }
