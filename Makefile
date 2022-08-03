@@ -34,6 +34,12 @@ vet:
 fmt:
 	go fmt ./...
 
+## fmt: Format all go source files
+.PHONY: api
+api:
+	yarn --cwd ./server/web add oazapfts
+	yarn --cwd ./server/web oazapfts ./src/api/api.yaml ./src/api/api.ts
+
 ## build: Build binary into bin/ directory
 .PHONY: build
 build: 

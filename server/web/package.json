@@ -12,6 +12,7 @@
     "@popperjs/core": "^2.11.5",
     "@types/node": "^18.0.6",
     "bootstrap": "^5.2.0",
+    "oazapfts": "^3.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "6"
