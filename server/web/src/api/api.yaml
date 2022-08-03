@@ -1,0 +1,63 @@
+openapi: 3.0.2
+info:
+    title: GAA
+    version: 1.0.0
+    description: Go Automatic Apps API
+    contact:
+        name: Golang Buddies
+        url: 'https://github.com/rog-golang-buddies/go-automatic-apps'
+    license:
+        name: Apache 2.0
+        url: 'https://www.apache.org/licenses/LICENSE-2.0'
+servers:
+    -
+        url: 'http://localhost:8080/api'
+        description: ''
+paths:
+    /models:
+        get:
+            tags:
+                - model
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                    description: Model names
+            summary: Returns all model names
+    '/models/{model}/rows':
+        get:
+            tags:
+                - model
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items: {}
+                    description: Model rows
+            summary: Returns model rows
+        parameters:
+            -
+                name: model
+                schema:
+                    type: string
+                in: path
+                required: true
+            -
+                name: limit
+                description: ''
+                schema:
+                    type: integer
+                in: query
+                required: false
+            -
+                name: offset
+                description: ''
+                schema:
+                    type: integer
+                in: query
