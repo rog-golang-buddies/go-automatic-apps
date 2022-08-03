@@ -41,6 +41,12 @@ protoc:
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
 	protoc -I=./proto --go_out=. --go-grpc_out=. ./proto/*.proto
 
+## api: Generate Typescript client from OpenAPI spec
+.PHONY: api
+api:
+	yarn --cwd ./server/web add oazapfts
+	yarn --cwd ./server/web oazapfts ./src/api/api.yaml ./src/api/api.ts
+
 ## build: Build binary into bin/ directory
 .PHONY: build
 build: protoc
