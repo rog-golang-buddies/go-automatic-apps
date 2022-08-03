@@ -39,8 +39,6 @@ The server does it automatically by reading the models definitions.
 ## Setup
 
 * Go 1.18
-* Protocol Buffers: [](https://github.com/protocolbuffers/protobuf/releases)
-
 
 ## Folders
 

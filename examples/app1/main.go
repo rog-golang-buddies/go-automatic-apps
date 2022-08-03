@@ -30,7 +30,6 @@ func main() {
 	var config = gaa.ServerConfig{
 		Host:     "localhost",
 		HttpPort: "8080",
-		GRPCPort: "8081",
 		Tables:   tables,
 	}
 
