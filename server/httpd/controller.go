@@ -43,7 +43,7 @@ func (c *controller) Start(ctx context.Context, host, port string) error {
 		panic(err)
 	}
 
-	c.mux.Handle("/", http.FileServer(http.FS(webRoot)))
+	c.mux.Handle("/*", http.FileServer(http.FS(webRoot)))
 
     //define endpoints
     c.mux.Get("/api/models", c.GetModels)
