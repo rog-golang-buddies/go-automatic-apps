@@ -37,12 +37,15 @@ fmt:
 ## api: Generate Typescript client from OpenAPI spec
 .PHONY: api
 api:
-	yarn --cwd ./server/web add oazapfts
 	yarn --cwd ./server/web oazapfts ./src/api/api.yaml ./src/api/api.ts
+
+## web: Build web application
+.PHONY: web
+web: api
+	yarn --cwd ./server/web install
+	yarn --cwd ./server/web build
 
 ## build: Build binary into bin/ directory
 .PHONY: build
-build: 
-	yarn --cwd ./server/web install
-	yarn --cwd ./server/web build
+build: web
 	go build -ldflags="-w -s" -o bin/ ./cmd/...

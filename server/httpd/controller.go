@@ -14,24 +14,24 @@ import (
 )
 
 type controller struct {
-	mux    *chi.Mux
-	server *http.Server
-    webDistFS fs.FS
+	mux       *chi.Mux
+	server    *http.Server
+	webDistFS fs.FS
 }
 
 func NewController(webDist fs.FS) *controller {
 	c := &controller{
-		mux: chi.NewMux(),
-        webDistFS: webDist,
+		mux:       chi.NewMux(),
+		webDistFS: webDist,
 	}
 
 	return c
 }
 
-//Start starts the server and blocks until shutdown
+// Start starts the server and blocks until shutdown
 func (c *controller) Start(ctx context.Context, host, port string) error {
 
-    c.mux.Use(middleware.Recoverer, middleware.Logger) 
+	c.mux.Use(middleware.Recoverer, middleware.Logger)
 
 	handler := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
@@ -45,8 +45,8 @@ func (c *controller) Start(ctx context.Context, host, port string) error {
 
 	c.mux.Handle("/*", http.FileServer(http.FS(webRoot)))
 
-    //define endpoints
-    c.mux.Get("/api/models", c.GetModels)
+	//define endpoints
+	c.mux.Get("/api/models", c.GetModels)
 
 	c.server = &http.Server{
 		Addr:         host + ":" + port,
