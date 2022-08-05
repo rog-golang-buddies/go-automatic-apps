@@ -1,6 +1,7 @@
 package httpd
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/rog-golang-buddies/go-automatic-apps/database"
@@ -8,5 +9,8 @@ import (
 
 func (c *controller) GetModels(w http.ResponseWriter, r *http.Request) {
 	tables := database.GetTables()
-	WriteJSON(w, http.StatusOK, tables)
+	err := WriteJSON(w, http.StatusOK, tables)
+	if err != nil {
+		log.Fatalf("Error on GetModels: %s", err.Error())
+	}
 }
