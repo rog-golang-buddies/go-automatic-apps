@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/rog-golang-buddies/go-automatic-apps/config"
 	"github.com/rs/cors"
 )
 
@@ -29,7 +30,7 @@ func NewController(webDist fs.FS) *controller {
 }
 
 // Start starts the server and blocks until shutdown
-func (c *controller) Start(ctx context.Context, host, port string) error {
+func (c *controller) Start(ctx context.Context, config config.ServerConfig) error {
 
 	c.mux.Use(middleware.Recoverer, middleware.Logger)
 
@@ -46,10 +47,10 @@ func (c *controller) Start(ctx context.Context, host, port string) error {
 	c.mux.Handle("/*", http.FileServer(http.FS(webRoot)))
 
 	//define endpoints
-	c.mux.Get("/api/models", c.GetModels)
+	c.mux.Get("/api/models", CreateGetModelsHandler(config))
 
 	c.server = &http.Server{
-		Addr:         host + ":" + port,
+		Addr:         config.Host + ":" + config.HttpPort,
 		Handler:      handler,
 		ErrorLog:     log.Default(),     // set the logger for the server
 		ReadTimeout:  10 * time.Second,  // max time to read request from the client
