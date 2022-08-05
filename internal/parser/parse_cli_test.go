@@ -104,8 +104,8 @@ func TestParseCliArguments(t *testing.T) {
 			t.Fatalf("Error was expected but not received")
 		}
 
-		if err.Error() != "no commands were provided" {
-			t.Fatalf("Error message incorrect. Expected \"%v\" got \"%v\"", "no commands were provided", err.Error())
+		if err.Error() != "no action was provided" {
+			t.Fatalf("Error message incorrect. Expected \"%v\" got \"%v\"", "no action was provided", err.Error())
 		}
 
 	})
