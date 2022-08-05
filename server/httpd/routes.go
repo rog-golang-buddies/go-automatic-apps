@@ -22,3 +22,30 @@ func CreateGetModelsHandler(config config.ServerConfig) func(w http.ResponseWrit
 		}
 	}
 }
+
+func CreateGetModelRows(config config.ServerConfig) func(w http.ResponseWriter, r *http.Request) {
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		modelName, ok := ctx.Value("model").(string)
+		if !ok {
+			http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+			return
+		}
+
+		var model any
+		for _, m := range config.Models {
+			if m.Name == modelName {
+				model = m.Model
+				break
+			}
+		}
+
+		config.DB.Find(model)
+
+		err := WriteJSON(w, http.StatusOK, "yeah")
+		if err != nil {
+			log.Fatalf("Error on GetModelRows: %s", err.Error())
+		}
+	}
+}

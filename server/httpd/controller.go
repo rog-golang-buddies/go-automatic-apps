@@ -48,6 +48,7 @@ func (c *controller) Start(ctx context.Context, config config.ServerConfig) erro
 
 	//define endpoints
 	c.mux.Get("/api/models", CreateGetModelsHandler(config))
+	c.mux.Get("/api/models/{:model}", CreateGetModelRows(config))
 
 	c.server = &http.Server{
 		Addr:         config.Host + ":" + config.HttpPort,
