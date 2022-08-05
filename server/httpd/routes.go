@@ -8,5 +8,8 @@ import (
 
 func (c *controller) GetModels(w http.ResponseWriter, r *http.Request) {
 	tables := database.GetTables()
-	WriteJSON(w, http.StatusOK, tables)
+	err := WriteJSON(w, http.StatusOK, tables)
+	if err != nil {
+		log.Fatalf("Error on GetModels: %s", err.Error())
+	}
 }
