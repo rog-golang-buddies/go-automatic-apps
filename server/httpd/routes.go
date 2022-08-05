@@ -1,6 +1,7 @@
 package httpd
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/rog-golang-buddies/go-automatic-apps/database"
