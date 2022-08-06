@@ -34,7 +34,10 @@ func CreateGetModelRows(config config.ServerConfig) func(w http.ResponseWriter, 
 		if err1 != nil {
 			log.Fatalf("Error on GetModelRows: %s", err1.Error())
 			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte(err1.Error()))
+			_, err := w.Write([]byte(err1.Error()))
+			if err != nil {
+				log.Fatalf("Error on GetModelRows: %s", err.Error())
+			}
 			return
 		}
 
