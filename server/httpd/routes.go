@@ -38,9 +38,9 @@ func CreateGetModelRows(config config.ServerConfig) func(w http.ResponseWriter, 
 			return
 		}
 
-		result := []interface{}{}
+		result := []map[string]interface{}{}
 		config.DB.
-			Model(&model.Model).
+			Model(model.Model).
 			Find(&result)
 
 		err := WriteJSON(w, http.StatusOK, result)
