@@ -34,7 +34,10 @@ func (c *controller) Start(ctx context.Context, config config.ServerConfig) erro
 
 	// Migrate the schema
 	for _, model := range config.Models {
-		config.DB.AutoMigrate(model.Model)
+		err := config.DB.AutoMigrate(model.Model)
+		if err != nil {
+			log.Fatalf("Error on AutoMigrate model %s: %s", model.Name, err.Error())
+		}
 	}
 
 	c.mux.Use(middleware.Recoverer, middleware.Logger)
