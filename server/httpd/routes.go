@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/rog-golang-buddies/go-automatic-apps/config"
 )
 
@@ -26,24 +27,23 @@ func CreateGetModelsHandler(config config.ServerConfig) func(w http.ResponseWrit
 func CreateGetModelRows(config config.ServerConfig) func(w http.ResponseWriter, r *http.Request) {
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
-		modelName, ok := ctx.Value("model").(string)
-		if !ok {
-			http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+
+		modelName := chi.URLParam(r, "model")
+
+		model, err1 := config.FindModel(modelName)
+		if err1 != nil {
+			log.Fatalf("Error on GetModelRows: %s", err1.Error())
+			w.WriteHeader(http.StatusNotFound)
+			w.Write([]byte(err1.Error()))
 			return
 		}
 
-		var model any
-		for _, m := range config.Models {
-			if m.Name == modelName {
-				model = m.Model
-				break
-			}
-		}
+		result := []interface{}{}
+		config.DB.
+			Model(&model.Model).
+			Find(&result)
 
-		config.DB.Find(model)
-
-		err := WriteJSON(w, http.StatusOK, "yeah")
+		err := WriteJSON(w, http.StatusOK, result)
 		if err != nil {
 			log.Fatalf("Error on GetModelRows: %s", err.Error())
 		}

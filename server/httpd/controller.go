@@ -32,6 +32,11 @@ func NewController(webDist fs.FS) *controller {
 // Start starts the server and blocks until shutdown
 func (c *controller) Start(ctx context.Context, config config.ServerConfig) error {
 
+	// Migrate the schema
+	for _, model := range config.Models {
+		config.DB.AutoMigrate(model.Model)
+	}
+
 	c.mux.Use(middleware.Recoverer, middleware.Logger)
 
 	handler := cors.New(cors.Options{
@@ -48,7 +53,7 @@ func (c *controller) Start(ctx context.Context, config config.ServerConfig) erro
 
 	//define endpoints
 	c.mux.Get("/api/models", CreateGetModelsHandler(config))
-	c.mux.Get("/api/models/{:model}", CreateGetModelRows(config))
+	c.mux.Get("/api/models/{model}/rows", CreateGetModelRows(config))
 
 	c.server = &http.Server{
 		Addr:         config.Host + ":" + config.HttpPort,
@@ -61,6 +66,22 @@ func (c *controller) Start(ctx context.Context, config config.ServerConfig) erro
 			return ctx
 		},
 	}
+
+	// Create fake data
+	p, err := config.FindModel("Product")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	m := config.DB.Model(p.Model)
+	m.Create(map[string]interface{}{
+		"Code":  "ABC123",
+		"Price": 18,
+	})
+	m.Create(map[string]interface{}{
+		"Code":  "DEF567",
+		"Price": 9090,
+	})
 
 	log.Println("Starting server")
 	return c.server.ListenAndServe()

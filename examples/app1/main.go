@@ -21,9 +21,13 @@ func main() {
 		HttpPort: "8080",
 		DB:       db,
 		Models: []cfg.ModelDescriptor{
-			cfg.ModelDescriptor{
+			{
 				Name:  "Product",
 				Model: models.Product{},
+			},
+			{
+				Name:  "Todo",
+				Model: models.Todo{},
 			},
 		},
 	}
