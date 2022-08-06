@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/rog-golang-buddies/go-automatic-apps/config"
 	"github.com/rs/cors"
 )
 
@@ -29,7 +30,15 @@ func NewController(webDist fs.FS) *controller {
 }
 
 // Start starts the server and blocks until shutdown
-func (c *controller) Start(ctx context.Context, host, port string) error {
+func (c *controller) Start(ctx context.Context, config config.ServerConfig) error {
+
+	// Migrate the schema
+	for _, model := range config.Models {
+		err := config.DB.AutoMigrate(model.Model)
+		if err != nil {
+			log.Fatalf("Error on AutoMigrate model %s: %s", model.Name, err.Error())
+		}
+	}
 
 	c.mux.Use(middleware.Recoverer, middleware.Logger)
 
@@ -46,10 +55,11 @@ func (c *controller) Start(ctx context.Context, host, port string) error {
 	c.mux.Handle("/*", http.FileServer(http.FS(webRoot)))
 
 	//define endpoints
-	c.mux.Get("/api/models", c.GetModels)
+	c.mux.Get("/api/models", CreateGetModelsHandler(config))
+	c.mux.Get("/api/models/{model}/rows", CreateGetModelRows(config))
 
 	c.server = &http.Server{
-		Addr:         host + ":" + port,
+		Addr:         config.Host + ":" + config.HttpPort,
 		Handler:      handler,
 		ErrorLog:     log.Default(),     // set the logger for the server
 		ReadTimeout:  10 * time.Second,  // max time to read request from the client
@@ -59,6 +69,22 @@ func (c *controller) Start(ctx context.Context, host, port string) error {
 			return ctx
 		},
 	}
+
+	// Create fake data
+	p, err := config.FindModel("Product")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	m := config.DB.Model(p.Model)
+	m.Create(map[string]interface{}{
+		"Code":  "ABC123",
+		"Price": 18,
+	})
+	m.Create(map[string]interface{}{
+		"Code":  "DEF567",
+		"Price": 9090,
+	})
 
 	log.Println("Starting server")
 	return c.server.ListenAndServe()

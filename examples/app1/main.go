@@ -1,36 +1,35 @@
 package main
 
 import (
-	"app1/ent"
-	"app1/ent/migrate"
-	"context"
-	"log"
+	"app1/models"
 
-	"entgo.io/ent/dialect"
-	_ "github.com/mattn/go-sqlite3"
+	cfg "github.com/rog-golang-buddies/go-automatic-apps/config"
 	gaa "github.com/rog-golang-buddies/go-automatic-apps/server"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func main() {
 
-	// Create an ent.Client with in-memory SQLite database.
-	client, err := ent.Open(dialect.SQLite, "file:ent?mode=memory&cache=shared&_fk=1")
+	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("failed opening connection to sqlite: %v", err)
-	}
-	defer client.Close()
-	ctx := context.Background()
-	// Run the automatic migration tool to create all schema resources.
-	if err := client.Schema.Create(ctx); err != nil {
-		log.Fatalf("failed creating schema resources: %v", err)
+		panic("failed to connect database")
 	}
 
-	var tables = migrate.Tables
-
-	var config = gaa.ServerConfig{
+	var config = cfg.ServerConfig{
 		Host:     "localhost",
 		HttpPort: "8080",
-		Tables:   tables,
+		DB:       db,
+		Models: []cfg.ModelDescriptor{
+			{
+				Name:  "Product",
+				Model: models.Product{},
+			},
+			{
+				Name:  "Todo",
+				Model: models.Todo{},
+			},
+		},
 	}
 
 	gaa.Start(config)
