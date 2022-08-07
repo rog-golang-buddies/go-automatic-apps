@@ -13,6 +13,16 @@ const oazapfts = Oazapfts.runtime(defaults);
 export const servers = {
     server1: "http://localhost:8080/api"
 };
+export type RowsResult = {
+    ModelName?: string;
+    TableName?: string;
+    Fields?: {
+        Name?: string;
+        Type?: string;
+        Size?: number;
+    }[];
+    Data?: any[];
+};
 /**
  * Returns all model names
  */
@@ -33,7 +43,7 @@ export function getModelsByModelRows(model: string, { limit, offset }: {
 } = {}, opts?: Oazapfts.RequestOpts) {
     return oazapfts.fetchJson<{
         status: 200;
-        data: any[];
+        data: RowsResult;
     }>(`/models/${model}/rows${QS.query(QS.form({
         limit,
         offset

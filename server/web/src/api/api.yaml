@@ -37,8 +37,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items: {}
+                                $ref: "#/components/schemas/RowsResult"
                     description: Model rows
             summary: Returns model rows
         parameters:
@@ -61,3 +60,27 @@ paths:
                 schema:
                     type: integer
                 in: query
+
+components:
+  schemas:
+    RowsResult:
+        type: object
+        properties:
+            ModelName:
+                type: string
+            TableName:
+                type: string
+            Fields:
+                type: array
+                items:
+                    type: object
+                    properties:
+                        Name:
+                            type: string
+                        Type:
+                            type: string
+                        Size:
+                            type: number
+            Data:
+                type: array
+                items: {}
