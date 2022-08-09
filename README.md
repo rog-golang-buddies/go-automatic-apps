@@ -38,7 +38,7 @@ The server does it automatically by reading the models definitions.
 
 ## Setup
 
-* Go 1.18
+* Go 1.19
 
 ## Folders
 

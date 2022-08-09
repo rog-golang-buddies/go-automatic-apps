@@ -2,7 +2,7 @@ module app1
 
 replace github.com/rog-golang-buddies/go-automatic-apps => ../../
 
-go 1.18
+go 1.19
 
 require (
 	github.com/rog-golang-buddies/go-automatic-apps v1.1.0
