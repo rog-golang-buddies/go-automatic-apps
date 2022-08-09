@@ -5,6 +5,8 @@
 
 Generate CRUD applications automatically with the least effort and as beautiful as possible
 
+Discord channel: [#go-automatic-apps-discussion](https://discord.com/channels/985562648663961690/991318636692246603)
+
 ## How Go Automatic Apps is used? (To be done)
 
 1. Create a new Go project
