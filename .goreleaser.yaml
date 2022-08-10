@@ -12,7 +12,7 @@ before:
     - go generate ./...
 builds:
   - main: ./cmd/gaa/
-  - env: [CGO_ENABLED=0]
+    env: [CGO_ENABLED=0]
     goos:
       - linux
       - windows
