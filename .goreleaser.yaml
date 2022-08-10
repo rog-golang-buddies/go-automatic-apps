@@ -11,6 +11,7 @@ before:
     # you may remove this if you don't need go generate
     - go generate ./...
 builds:
+  - main: ./cmd/gaa/
   - env: [CGO_ENABLED=0]
     goos:
       - linux
