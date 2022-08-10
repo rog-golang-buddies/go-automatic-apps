@@ -11,8 +11,7 @@ before:
     # you may remove this if you don't need go generate
     - go generate ./...
 builds:
-  - main: ./cmd/gaa/
-    env: [CGO_ENABLED=0]
+  - env: [CGO_ENABLED=0]
     goos:
       - linux
       - windows
@@ -24,7 +23,7 @@ builds:
     # Defaults to the binary name, uncomment line below if needed
     # id: "golang-template-repository"
     dir: .
-    main: ./cmd
+    main: ./cmd/gaa
     # uncomment this line to build binary at specific location# Binary name.
     # Can be a path (e.g. `bin/app`) to wrap the binary in a directory.
     # Default is the name of the project directory.
