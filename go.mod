@@ -13,4 +13,4 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 )
 
-require gorm.io/gorm v1.23.8
+require gorm.io/gorm v1.23.10
